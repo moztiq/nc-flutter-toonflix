@@ -37,7 +37,7 @@ class _DetailScreenState extends State<DetailScreen> {
         foregroundColor: Colors.amber.shade900,
         title: Text(
           widget.webtoon.title,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 24,
             fontWeight: FontWeight.w500,
           ),
@@ -45,7 +45,7 @@ class _DetailScreenState extends State<DetailScreen> {
       ),
       body: Column(
         children: [
-          SizedBox(
+          const SizedBox(
             height: 50,
           ),
           Row(
@@ -76,6 +76,42 @@ class _DetailScreenState extends State<DetailScreen> {
                 ),
               ),
             ],
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          FutureBuilder(
+            future: webtoon,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 50,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        snapshot.data!.about,
+                        style: const TextStyle(
+                          fontSize: 16,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      Text(
+                        '${snapshot.data!.genre} / ${snapshot.data!.age}',
+                        style: const TextStyle(
+                          fontSize: 16,
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              }
+              return const Text('...');
+            },
           ),
         ],
       ),
