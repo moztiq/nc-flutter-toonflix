@@ -1,14 +1,32 @@
 import 'package:flutter/material.dart';
+import 'package:nc_flutter_toonflix/models/webtoon_detail_model.dart';
+import 'package:nc_flutter_toonflix/models/webtoon_episode_model.dart';
 
 import '../models/webtoon_model.dart';
+import '../services/api_service.dart';
 
-class DetailScreen extends StatelessWidget {
+class DetailScreen extends StatefulWidget {
   final WebtoonModel webtoon;
 
   const DetailScreen({
     super.key,
     required this.webtoon,
   });
+
+  @override
+  State<DetailScreen> createState() => _DetailScreenState();
+}
+
+class _DetailScreenState extends State<DetailScreen> {
+  late final Future<WebtoonDetailModel> webtoon;
+  late final Future<List<WebtoonEpisodeModel>> episodes;
+
+  @override
+  void initState() {
+    super.initState();
+    webtoon = ApiService.getToonById(widget.webtoon.id);
+    episodes = ApiService.getLatestEpisodesById(widget.webtoon.id);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +36,7 @@ class DetailScreen extends StatelessWidget {
         backgroundColor: Colors.white,
         foregroundColor: Colors.amber.shade900,
         title: Text(
-          webtoon.title,
+          widget.webtoon.title,
           style: TextStyle(
             fontSize: 24,
             fontWeight: FontWeight.w500,
@@ -34,7 +52,7 @@ class DetailScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Hero(
-                tag: webtoon.id,
+                tag: widget.webtoon.id,
                 child: Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(15),
@@ -49,7 +67,7 @@ class DetailScreen extends StatelessWidget {
                   clipBehavior: Clip.hardEdge,
                   width: 200,
                   child: Image.network(
-                    webtoon.thumb,
+                    widget.webtoon.thumb,
                     headers: const {
                       "User-Agent":
                           "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36",
